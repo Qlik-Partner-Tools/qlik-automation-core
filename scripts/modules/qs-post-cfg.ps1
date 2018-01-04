@@ -12,6 +12,9 @@ Intent: Configure the Qlik Sense environment with applications and Security Rule
 if(!(Test-Path c:\qmi\QMIError)){
     Write-Log -Message "Starting qs-post-cfg.ps1"
     $license = (Get-Content c:\shared-content\licenses\qlik-license.json -raw) | ConvertFrom-Json
+    if ( (Test-Path c:\shared-content-plus\licenses\qlik-license.json) ) {
+        $license = (Get-Content c:\shared-content-plus\licenses\qlik-license.json -raw) | ConvertFrom-Json
+    }
     $scenario = (Get-Content c:\vagrant\scenario.json -raw) | ConvertFrom-Json
 
     ### Waiting for Qlik Sense installation to complete
