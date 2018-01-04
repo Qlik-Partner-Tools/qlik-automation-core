@@ -1,0 +1,156 @@
+{
+    "servers": [
+      {
+          "name": "qmi-qv-ws",
+          "ip": "192.168.56.4"
+      },
+      {
+          "name": "qmi-qv-iis",
+          "ip": "192.168.56.5"
+      },
+      {
+          "name": "qmi-qs-sn",
+          "ip": "192.168.56.6"
+      },
+      {
+          "name": "qmi-qs-aai",
+          "ip": "192.168.56.7"
+      },
+      {
+          "name": "qmi-qs-mn",
+          "ip": "192.168.56.8"
+      },
+      {
+          "name": "qmi-qs-mn02",
+          "ip": "192.168.56.9"
+      },
+      {
+          "name": "qmi-qs-sa",
+          "ip": "192.168.56.10"
+      },
+      {
+          "name": "qmi-qs-odag",
+          "ip": "192.168.56.11"
+      },
+      {
+          "name": "qmi-qs-sync",
+          "ip": "192.168.56.12"
+      },
+      {
+          "name": "qmi-qs-ind",
+          "ip": "192.168.56.13"
+      },
+      {
+          "name": "qmi-qs-gss",
+          "ip": "192.168.56.14"
+      },
+      {
+          "name": "qmi-db",
+          "ip": "192.168.56.20"
+      },
+      {
+          "name": "qmi-wn-bl",
+          "ip": "192.168.56.21"
+      },
+      {
+          "name": "qmi-ad",
+          "ip": "192.168.56.3"
+      },
+      {
+          "name": "qmi-ad-qs",
+          "ip": "192.168.56.22"
+      },
+      {
+          "name": "qmi-ad-qs.qliklocal.net",
+          "ip": "192.168.56.22"
+      },
+      {
+          "name": "qmi-persistence",
+          "ip": "192.168.56.23"
+      },
+      {
+          "name": "qmi-qs-ps2",
+          "ip": "192.168.56.24"
+      },
+      {
+          "name": "qmi-nginx",
+          "ip": "192.168.56.15"
+      }
+      ,
+      {
+          "name": "qmi-qs-ticket",
+          "ip": "192.168.56.25"
+      },
+      {
+          "name": "qmi-qs-ticket.qmi.com",
+          "ip": "192.168.56.25"
+      },
+      {
+          "name": "qmi-qs-pr",
+          "ip": "192.168.56.16"
+      }
+      ,
+      {
+          "name": "qmi-ad-np",
+          "ip": "192.168.56.17"
+      },
+      {
+          "name": "qmi-scalability",
+          "ip": "192.168.56.26"
+      },
+      {
+          "name": "qmi-qv-pr",
+          "ip": "192.168.56.27"
+      },
+      {
+          "name": "qmi-qs-cln",
+          "ip": "192.168.56.18"
+      },
+      {
+          "name": "qmi-elasticsearch",
+          "ip": "192.168.56.28"
+      },
+      {
+          "name": "qmi-ubuntu-docker",
+          "ip": "192.168.56.29"
+      }
+      ,
+      {
+          "name": "qmi-cloudera",
+          "ip": "192.168.56.30"
+      },
+      {
+          "name": "qmi-ubuntu",
+          "ip": "192.168.56.52"
+      }
+      ,
+      {
+          "name": "qmi-centos",
+          "ip": "192.168.56.51"
+      },
+      {
+          "name": "qmi-centos-docker",
+          "ip": "192.168.56.50"
+      },
+      {
+          "name": "qmi-centos-n1",
+          "ip": "192.168.56.53"
+      }
+      ,
+      {
+          "name": "qmi-centos-n2",
+          "ip": "192.168.56.54"
+      }
+      ,
+      {
+          "name": "qmi-centos-n3",
+          "ip": "192.168.56.55"
+      },
+      {
+          "name": "qmi-pgadmin",
+          "ip": "192.168.56.56"
+      }
+
+    ]
+  }
+  

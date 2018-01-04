@@ -1,0 +1,1 @@
+Add Qlik installers to this folder.

@@ -1,0 +1,16 @@
+.DS_Store
+/iso/*
+!/iso/README.md
+/*.box
+/packer_cache/
+*.log
+*~
+/output/
+*.webm
+tmp
+/issues/
+*.iso
+.vagrant/
+.vscode/
+Qlik_Sense_setup.exe
+QlikViewServer_x64Setup.exe

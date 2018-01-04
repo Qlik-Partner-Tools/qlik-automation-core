@@ -1,0 +1,1 @@
+Place any flat files that you want to provision with QMI.  Data connections and rules will be automatically generated to support this.

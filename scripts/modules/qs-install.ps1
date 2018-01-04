@@ -1,0 +1,80 @@
+<#
+Module:             qs-install
+Author:             Clint Carr
+Modified by:        -
+Modification History:
+ - Added Logging
+ - Added comments
+ - Sent output to Null
+ - Changed installation to an Invoke-Command script block
+last updated:       10/11/2017
+Intent: Install the selected version of Qlik Sense
+#>
+
+Write-Log -Message "Starting qs-install.ps1"
+$scenario = (Get-Content c:\vagrant\scenario.json -raw) | ConvertFrom-Json
+$config = (Get-Content c:\vagrant\files\qs-cfg.json -raw) | ConvertFrom-Json
+foreach ($server in $scenario.config.servers)
+{
+    If ($server.sense.persistence -eq "shared" -and $server.sense.central -eq $true -and $server.name -eq $ENV:computername )
+    {
+        Write-Log -Message "Installing Shared Persistence"
+        If (Test-Path "C:\installation\Qlik_Sense_setup.exe")
+        {
+            Write-Log -Message "Installing Qlik Sense Server from c:\installation"
+            Unblock-File -Path C:\installation\Qlik_Sense_setup.exe
+            Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\installation\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass)  spc=c:\installation\sp_config.xml" -Wait -PassThru}  | Out-Null
+        }
+        elseIf (Test-Path "c:\shared-content\binaries\Qlik_Sense_setup.exe")
+        {
+            Write-Log -Message "Installing Qlik Sense Server from c:\shared-content\binaries"
+            Unblock-File -Path C:\shared-content\binaries\Qlik_Sense_setup.exe
+            Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass)  spc=c:\installation\sp_config.xml" -Wait -PassThru} | Out-Null
+        }
+        else
+        {
+            Write-Log -Message "No Binary found. Stopping provision" -Severity "Error"
+            New-Item c:\qmi\QMIError -Force -ItemType File | Out-Null
+            Exit
+        }
+    }
+    elseif ($server.sense.persistence -eq "sync" -and $server.sense.central -eq $true -and $server.name -eq $ENV:computername )
+    {
+        Write-Log -Message "Installing Synchronised Persistence"
+        Write-Log -Message "Note: Will not function with June and later releases!"
+        If (Test-Path "C:\shared-content\binaries\Qlik_Sense_setup.exe")
+        {
+            Write-Log -Message "Installing Qlik Sense Server from c:\shared-content\binaries"
+            Unblock-File -Path C:\shared-content\binaries\Qlik_Sense_setup.exe
+            Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass)" -Wait -PassThru} | Out-Null
+        }
+        else
+        {
+            Write-Log -Message "No Binary found. Stopping provision" -Severity "Error"
+            New-Item c:\qmi\QMIError -Force -ItemType File | Out-Null
+            Exit
+        }
+    }
+    elseif ($server.sense.central -eq $false -and $server.sense.persistence -eq "shared" -and $server.name -eq $env:computername)
+    {
+            Write-Log -Message "Installing RIM Node Shared Persistence"
+            If (Test-Path "C:\installation\Qlik_Sense_setup.exe")
+            {
+                Write-Log -Message "Installing Qlik Sense Server from c:\installation"
+                Unblock-File -Path C:\installation\Qlik_Sense_setup.exe
+                Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\installation\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt rimnode=1 dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass)  spc=c:\installation\sp_config_rim.xml" -Wait -PassThru} | Out-Null
+            }
+            elseIf (Test-Path "c:\shared-content\binaries\Qlik_Sense_setup.exe")
+            {
+                Write-Log -Message "Installing Qlik Sense Server from c:\shared-content\binaries"
+                Unblock-File -Path C:\shared-content\binaries\Qlik_Sense_setup.exe
+                Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt rimnode=1 dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass)  spc=c:\installation\sp_config_rim.xml" -Wait -PassThru}  | Out-Null
+            }
+            else
+            {
+                Write-Log -Message "No Binary found. Stopping provision" -Severity "Error"
+                New-Item c:\qmi\QMIError -Force -ItemType File | Out-Null
+                Exit
+            }
+    }
+}
