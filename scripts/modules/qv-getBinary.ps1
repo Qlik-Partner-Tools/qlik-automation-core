@@ -14,7 +14,13 @@ Dependencies:
  - 
 #>
 Write-Log -Message "Starting qv-getBinary.ps1"
+$defBinary = (Get-Content c:\vagrant\scenario.json -raw | ConvertFrom-Json)
 $qvVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
+if ($defBinary.$("qlik-default-binary") -ne $null){
+    $qvVer.name = $defBinary.$("qlik-default-binary")
+    $qvVer | ConvertTo-Json | Set-Content c:\shared-content\binaries\qver.json
+    $qvVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
+}
 $qvBinaryURL = (Get-Content C:\shared-content\binaries\qBinaryDownload.json -raw) | ConvertFrom-Json
 $bin = "c:\shared-content\binaries"
 $binLoc = gci $bin

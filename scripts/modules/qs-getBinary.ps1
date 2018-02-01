@@ -10,7 +10,13 @@ Intent: Download the Qlik Sense binary selected by the end user of QMI.
 #>
 
 Write-Log -Message "Starting qs-getBinary.ps1"
+$defBinary = (Get-Content c:\vagrant\scenario.json -raw | ConvertFrom-Json)
 $qsVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
+if ($defBinary.$("qlik-default-binary") -ne $null){
+    $qsVer.name = $defBinary.$("qlik-default-binary")
+    $qsver | ConvertTo-Json | Set-Content c:\shared-content\binaries\qver.json
+    $qsVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
+}
 $qsBinaryURL = (Get-Content C:\shared-content\binaries\qBinaryDownload.json -raw) | ConvertFrom-Json
 $bin = "c:\shared-content\binaries"
 $binLoc = gci $bin
