@@ -82,7 +82,7 @@ if(!(Test-Path c:\qmi\QMIError)){
 
     # start SSE plugin
     Write-Log -Message "Starting SSEtoRServe"
-    start powershell {C:\vagrant\files\sse-r-plugin-1.0.0-qlik-oss\SSEtoRserve.exe}
+    start powershell {C:\vagrant\files\sse-r-plugin-1.2.0-qlik-oss\SSEtoRserve.exe}
 
     Write-Log "Restarting Qlik Sense Engine Service"
     net stop QlikSenseEngineService | Out-Null
