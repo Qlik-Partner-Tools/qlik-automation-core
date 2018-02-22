@@ -29,8 +29,7 @@ Write-Log -Message "Installing carbon"
 cinst carbon -y | Out-Null
 
 ### create Qlik User
-$password = ConvertTo-SecureString -String "Qlik1234" -AsPlainText -Force 
-Install-User -UserName Qlik -Password $password
+Install-User -UserName Qlik -Password Qlik1234
 
 ### Grant Remote Admin Rights to Qlik User
 Write-Log -Message "Granting Qlik account Remote Interactive Logon Right"
