@@ -27,5 +27,5 @@ if(!(Test-Path c:\qmi\QMIError)){
 }
 else
 {
-    Write-Log -Message "Provisioning failed. Please check logs in ~/QlikMachineImages/<scenarioName>/QMIProvision.log"
+    Write-Log -Message "Provisioning failed. Please check logs in ~/QlikMachineImages/<scenarioName>/QMIProvision.log" -Severity "Error"  
 }
