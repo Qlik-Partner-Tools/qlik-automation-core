@@ -40,3 +40,6 @@ Add-GroupMember -Name 'Remote Desktop Users' -Member $env:COMPUTERNAME\qlik
 
 Write-Log -Message "Adding Qlik user to local Administrators"
 Add-GroupMember -Name 'Administrators' -Member $env:COMPUTERNAME\qlik
+
+$regPath = "HKLM:\SYSTEM\CurrentControlSet\Control"
+Set-ItemProperty $regPath -Name "ServicesPipeTimeout" -Type DWord -Value 180000
