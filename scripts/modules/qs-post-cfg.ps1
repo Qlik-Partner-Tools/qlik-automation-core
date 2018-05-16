@@ -76,8 +76,11 @@ if(!(Test-Path c:\qmi\QMIError)){
                 }
             Write-Log -Message "Qlik Sense Proxy responding on $env:COMPUTERNAME, status code: $statusCode"
             Write-Log -Message "Connecting to Qlik Sense Repository Service on $env:COMPUTERNAME"
-            start-sleep -s 10
+            start-sleep -s 25
 
+            # force a restart of the Engine service (possible bug in April 2018)
+            
+            Restart-Service QlikSenseEngineService -Force
             ### Connect to the Qlik Sense Repository Service with Qlik-Cli
             try
             {
