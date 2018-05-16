@@ -6,7 +6,8 @@ Modification History:
  - Added Logging
  - Added comments
  - Error checking
-last updated:       10/12/2017
+ - Modified service connection for Qlik Sense from endless loop to a set number of attempts.
+last updated:       05/16/2018
 Intent: Configure the Qlik Sense environment with applications and Security Rules.
 #>
 if(!(Test-Path c:\qmi\QMIError)){
@@ -26,24 +27,61 @@ if(!(Test-Path c:\qmi\QMIError)){
         if ($server.sense.central -eq $true -and $server.name -eq $ENV:computername)
         {
             ### wait for Qlik Sense Proxy service to respond with an HTTP 200 status before proceeding
-            $statusCode = 0
-            while ($StatusCode -ne 200)
+            Function connQSR
             {
-                Write-Log -Message "StatusCode is $StatusCode" -Severity "Warn"
-                try { $statusCode = (invoke-webrequest  https://$($env:COMPUTERNAME)/qps/user -usebasicParsing).statusCode }
-                Catch
-                    {
-                        write-Log -Message "Server down, waiting 20 seconds" -Severity "Warn"
-                        start-Sleep -s 20
-                    }
+                $i = 1
+                $statusCode = 0
+                while ($statusCode -ne 200 -and $i -le 10) 
+                    { 
+                        try {$statusCode = (Invoke-WebRequest https://$($env:COMPUTERNAME)/qps/user -UseBasicParsing).statusCode }
+                        catch
+                            {
+                                $i++
+                                write-log -Message "QSR on $env:COMPUTERNAME not responding attempt $i of 10..." -Severity "Warn"
+                                start-sleep -s 20 
+                            }
+                    } 
             }
+
+            Function restartServices
+            {
+                write-log -Message "Restarting Qlik Sense Services on $env:COMPUTERNAME" -Severity "Warn"
+                Restart-Service QlikSenseRepositoryDatabase -Force
+                Restart-Service QlikLoggingService -Force
+                Restart-Service QlikSenseServiceDispatcher -Force
+                Restart-Service QlikSenseRepositoryService -Force
+                Restart-Service QlikSenseProxyService -Force
+                Restart-Service QlikSenseEngineService -Force
+                Restart-Service QlikSensePrintingService -Force
+                Restart-Service QlikSenseSchedulerService -Force
+            }
+
+            connQSR
+
+            $statusCode = (Invoke-WebRequest https://$($env:COMPUTERNAME)/qps/user -UseBasicParsing).statusCode
+            if ($statusCode -ne 200)
+                { 
+                    Write-Log -Message "Waiting 25 seconds before next pass" -Severity "Warn"
+                    restartServices
+                    Write-Log -Message "Waiting 45 seconds for Services to ensure they are ready" -Severity "Warn"
+                    start-sleep -s 45
+                    connQSR
+                }
+            
+            $statusCode = (Invoke-WebRequest https://$($env:COMPUTERNAME)/qps/user -UseBasicParsing).statusCode
+            if ($statusCode -ne 200)
+                { 
+                    Write-Log -Message "Provisioning failed" -Severity "Error"
+                    Exit 
+                }
             Write-Log -Message "Qlik Sense Proxy responding on $env:COMPUTERNAME, status code: $statusCode"
             Write-Log -Message "Connecting to Qlik Sense Repository Service on $env:COMPUTERNAME"
+            start-sleep -s 10
 
             ### Connect to the Qlik Sense Repository Service with Qlik-Cli
             try
             {
-                Connect-Qlik $env:COMPUTERNAME -UseDefaultCredentials | Out-Null
+                Connect-Qlik $env:COMPUTERNAME -UseDefaultCredentials
             }
             catch
             {
