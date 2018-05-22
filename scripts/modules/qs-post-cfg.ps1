@@ -7,7 +7,8 @@ Modification History:
  - Added comments
  - Error checking
  - Modified service connection for Qlik Sense from endless loop to a set number of attempts.
-last updated:       05/16/2018
+ - Added a service restart at the end of the Central Node (seems to resolve an issue with April 2018)
+last updated:       05/22/2018
 Intent: Configure the Qlik Sense environment with applications and Security Rules.
 #>
 if(!(Test-Path c:\qmi\QMIError)){
@@ -288,6 +289,13 @@ if(!(Test-Path c:\qmi\QMIError)){
                 New-Item "C:\Users\vagrant\Documents\WindowsPowerShell\" -ItemType Directory  | Out-Null
             }
             echo 'function qsgrep($pattern,$service,$ext="txt") {Get-ChildItem "C:\ProgramData\Qlik\Sense\Log\$service" -Filter *.$ext -Recurse | Select-String $pattern}' > "C:\Users\vagrant\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
+
+            write-log -Message "Restarting services"
+            Restart-Service QlikSenseEngineService
+            start-sleep -s 10
+            Restart-Service QlikSenseServiceDispatcher
+            start-sleep -s 15
+
 
         }
         ### Rim Node
