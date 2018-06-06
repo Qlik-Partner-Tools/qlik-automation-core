@@ -5,8 +5,23 @@
             "url": "https://da3hntz84uekx.cloudfront.net/QlikSense/12.16/0/_MSI/Qlik_Sense_setup.exe"
         },
         {
+            "name": "Qlik Sense February 2018 Patch 2",
+            "url": "https://da3hntz84uekx.cloudfront.net/QlikSense/12.5/2/_MSI/Qlik_Sense_update.exe",
+            "url2": "https://da3hntz84uekx.cloudfront.net/QlikSense/12.52/0/_MSI/Qlik_Sense_setup.exe"
+        },
+        {
+            "name": "Qlik Sense February 2018 Patch 1",
+            "url": "https://da3hntz84uekx.cloudfront.net/QlikSense/12.5/1/_MSI/Qlik_Sense_update.exe",
+            "url2":"https://da3hntz84uekx.cloudfront.net/QlikSense/12.52/0/_MSI/Qlik_Sense_setup.exe"
+        },
+        {
             "name": "Qlik Sense February 2018",
             "url": "https://da3hntz84uekx.cloudfront.net/QlikSense/12.52/0/_MSI/Qlik_Sense_setup.exe"
+        },
+        {
+            "name": "Qlik Sense November 2017 Patch 3",
+            "url": "https://da3hntz84uekx.cloudfront.net/QlikSense/11.24/3/_MSI/Qlik_Sense_update.exe",
+            "url2": "https://da3hntz84uekx.cloudfront.net/QlikSense/11.24/0/_MSI/Qlik_Sense_setup.exe"
         },
         {
             "name": "Qlik Sense November 2017 Patch 2",
@@ -68,6 +83,18 @@
         }
     ],
     "qlikview": [
+        {
+            "name": "QlikView Server November 2017 SR5",
+            "url": "https://da3hntz84uekx.cloudfront.net/qlikview/12.20/122020600/_MSI/QlikViewServer_x64Setup.exe"
+        },
+        {
+            "name": "QlikView Server November 2017 SR4",
+            "url": "https://da3hntz84uekx.cloudfront.net/qlikview/12.20/122020500/_MSI/QlikViewServer_x64Setup.exe"
+        },
+        {
+            "name": "QlikView Server November 2017 SR3",
+            "url": "https://da3hntz84uekx.cloudfront.net/qlikview/12.20/122020400/_MSI/QlikViewServer_x64Setup.exe"
+        },
         {
             "name": "QlikView Server November 2017 SR2",
             "url": "https://da3hntz84uekx.cloudfront.net/qlikview/12.20/122020300/_MSI/QlikViewServer_x64Setup.exe"
