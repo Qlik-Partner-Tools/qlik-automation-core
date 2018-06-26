@@ -20,45 +20,55 @@ if(!(Test-Path c:\qmi\QMIError)){
     $scenario = (Get-Content c:\vagrant\scenario.json -raw) | ConvertFrom-Json
 
     ### Waiting for Qlik Sense installation to complete
-    Write-Log -Message "Waiting for installation to finish and services to come up..."
-    # start-Sleep -s 180
+    #-----------
+    Function restartQse
+    {
+        Write-Log "Checking Engine Service has started..."
+        $qse = get-service QlikSenseEngineService
+        write-log -Message "The engine is currently $($qse.Status)"
+        if ($qse.Status -eq "Stopped") {Write-Log -Message "Starting Qlik Sense Engine and waiting 120 seconds" -Severity "Warn"; Start-Service QlikSenseEngineService ; Restart-Service QlikSenseServiceDispatcher; start-sleep -s 120}
+        write-log -Message "The engine is currently $($qse.Status)"
+    }
+
+    Function connQSR
+    {
+        $i = 1
+        $statusCode = 0
+        while ($statusCode -ne 200 -and $i -le 10) 
+            { 
+                try {$statusCode = (Invoke-WebRequest https://$($env:COMPUTERNAME)/qps/user -UseBasicParsing).statusCode }
+                catch
+                    {
+                        $i++
+                        write-log -Message "QSR on $env:COMPUTERNAME not responding attempt $i of 10..." -Severity "Warn"
+                        start-sleep -s 20 
+                    }
+            } 
+    }
+
+    Function restartServices
+    {
+        write-log -Message "Restarting Qlik Sense Services on $env:COMPUTERNAME" -Severity "Warn"
+        Restart-Service QlikSenseRepositoryDatabase -Force
+        Restart-Service QlikLoggingService -Force
+        Restart-Service QlikSenseServiceDispatcher -Force
+        Restart-Service QlikSenseRepositoryService -Force
+        Restart-Service QlikSenseProxyService -Force
+        Restart-Service QlikSenseEngineService -Force
+        Restart-Service QlikSensePrintingService -Force
+        Restart-Service QlikSenseSchedulerService -Force
+    }
+
+    #-----------
+    write-log -Message "Waiting three minutes for Qlik Sense installation to complete"
+    start-sleep -s 180
 
     foreach ($server in $scenario.config.servers)
     {
         if ($server.sense.central -eq $true -and $server.name -eq $ENV:computername)
         {
             ### wait for Qlik Sense Proxy service to respond with an HTTP 200 status before proceeding
-            Function connQSR
-            {
-                $i = 1
-                $statusCode = 0
-                while ($statusCode -ne 200 -and $i -le 10) 
-                    { 
-                        try {$statusCode = (Invoke-WebRequest https://$($env:COMPUTERNAME)/qps/user -UseBasicParsing).statusCode }
-                        catch
-                            {
-                                $i++
-                                write-log -Message "QSR on $env:COMPUTERNAME not responding attempt $i of 10..." -Severity "Warn"
-                                start-sleep -s 20 
-                            }
-                    } 
-            }
-
-            Function restartServices
-            {
-                write-log -Message "Restarting Qlik Sense Services on $env:COMPUTERNAME" -Severity "Warn"
-                Restart-Service QlikSenseRepositoryDatabase -Force
-                Restart-Service QlikLoggingService -Force
-                Restart-Service QlikSenseServiceDispatcher -Force
-                Restart-Service QlikSenseRepositoryService -Force
-                Restart-Service QlikSenseProxyService -Force
-                Restart-Service QlikSenseEngineService -Force
-                Restart-Service QlikSensePrintingService -Force
-                Restart-Service QlikSenseSchedulerService -Force
-            }
-
             connQSR
-
             $statusCode = (Invoke-WebRequest https://$($env:COMPUTERNAME)/qps/user -UseBasicParsing).statusCode
             if ($statusCode -ne 200)
                 { 
@@ -79,9 +89,6 @@ if(!(Test-Path c:\qmi\QMIError)){
             Write-Log -Message "Connecting to Qlik Sense Repository Service on $env:COMPUTERNAME"
             start-sleep -s 25
 
-            # force a restart of the Engine service (possible bug in April 2018)
-            
-            Restart-Service QlikSenseEngineService -Force
             ### Connect to the Qlik Sense Repository Service with Qlik-Cli
             try
             {
