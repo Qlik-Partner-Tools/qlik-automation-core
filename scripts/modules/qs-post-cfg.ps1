@@ -87,7 +87,8 @@ if(!(Test-Path c:\qmi\QMIError)){
                 }
             Write-Log -Message "Qlik Sense Proxy responding on $env:COMPUTERNAME, status code: $statusCode"
             Write-Log -Message "Connecting to Qlik Sense Repository Service on $env:COMPUTERNAME"
-            start-sleep -s 25
+            
+            restartQse
 
             ### Connect to the Qlik Sense Repository Service with Qlik-Cli
             try
@@ -156,6 +157,7 @@ if(!(Test-Path c:\qmi\QMIError)){
             {
                 Write-Log -Message $_.Exception.Message -Severity "Error"
             }
+            restartQse
             ### Import scenario extensions
             Write-Log -Message "Importing extensions from c:\installation\extensions"
             If (Test-Path "C:\installation\extensions\") {
@@ -229,6 +231,7 @@ if(!(Test-Path c:\qmi\QMIError)){
                     }
                 }
             }
+            restartQse
             $apps = gci c:\shared-content\apps\ -Directory
             foreach ($subDirectory in $apps)
             {
