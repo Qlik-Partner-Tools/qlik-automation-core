@@ -43,3 +43,7 @@ Add-GroupMember -Name 'Administrators' -Member $env:COMPUTERNAME\qlik
 
 $regPath = "HKLM:\SYSTEM\CurrentControlSet\Control"
 Set-ItemProperty $regPath -Name "ServicesPipeTimeout" -Type DWord -Value 180000
+
+
+write-log -message "Disabling IPv6"
+Get-NetAdapter | foreach { Disable-NetAdapterBinding -InterfaceAlias $_.Name -ComponentID ms_tcpip6 }

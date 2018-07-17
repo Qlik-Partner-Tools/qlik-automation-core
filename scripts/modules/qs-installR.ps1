@@ -22,7 +22,7 @@ if(!(Test-Path c:\qmi\QMIError)){
     (New-Object System.Net.WebClient).DownloadFile("https://github.com/mhamano/advanced-analytics-toolbox/releases/download/v1.4.0/advanced-analytics-toolbox-1.4.0.zip", "$env:USERPROFILE\Downloads\extensions\advanced-analytics-toolbox-1.4.0.zip")
     ##AAIExpressionBuilder
     Write-Log -Message "Downloading AAIExpressionBuilder"
-    (New-Object System.Net.WebClient).DownloadFile("https://github.com/AnalyticsEarth/AAIExpressionBuilder/releases/download/v1.0.1/AAIExpressionBuilder.zip", "$env:USERPROFILE\Downloads\extensions\AAIExpressionBuilder.zip")
+    (New-Object System.Net.WebClient).DownloadFile("https://github.com/AnalyticsEarth/AAIExpressionBuilder/releases/download/v1.0.2/AAIExpressionBuilder.zip", "$env:USERPROFILE\Downloads\extensions\AAIExpressionBuilder.zip")
 
     Start-Sleep 5
     Write-Log "Connecting to the Qlik Sense Repository on $env:COMPUTERNAME"
