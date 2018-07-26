@@ -300,13 +300,6 @@ if(!(Test-Path c:\qmi\QMIError)){
             }
             echo 'function qsgrep($pattern,$service,$ext="txt") {Get-ChildItem "C:\ProgramData\Qlik\Sense\Log\$service" -Filter *.$ext -Recurse | Select-String $pattern}' > "C:\Users\vagrant\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
 
-            write-log -Message "Restarting services"
-            Restart-Service QlikSenseEngineService
-            start-sleep -s 10
-            Restart-Service QlikSenseServiceDispatcher
-            start-sleep -s 15
-
-
         }
         ### Rim Node
         elseif ($server.sense.central -eq $false -and $server.name -eq $ENV:computername)

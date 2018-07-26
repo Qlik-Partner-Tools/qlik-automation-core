@@ -3,10 +3,11 @@ Module:             q-user-setup
 Author:             Clint Carr
 Modified by:        -
 Modification History:
+ - Deleted disable IPv6
  - Changed the creation of Qlik User to be based on Carbon
  - Added Logging
  - Added comments
-last updated:       22/02/2018
+last updated:       27/07/2018
 Intent: Disable Password complexity, create Qlik user and grant remote desktop rights
 #>
 
@@ -43,7 +44,3 @@ Add-GroupMember -Name 'Administrators' -Member $env:COMPUTERNAME\qlik
 
 $regPath = "HKLM:\SYSTEM\CurrentControlSet\Control"
 Set-ItemProperty $regPath -Name "ServicesPipeTimeout" -Type DWord -Value 180000
-
-
-write-log -message "Disabling IPv6"
-Get-NetAdapter | foreach { Disable-NetAdapterBinding -InterfaceAlias $_.Name -ComponentID ms_tcpip6 }
