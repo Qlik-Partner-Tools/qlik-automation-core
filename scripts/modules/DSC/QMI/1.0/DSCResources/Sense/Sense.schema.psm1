@@ -8,6 +8,15 @@ Configuration SenseConfig
 
   Import-DSCResource -ModuleName PSDesiredStateConfiguration,QlikResources
 
+  QlikUser Vagrant
+    {
+      UserID = 'vagrant'
+      UserDirectory = $ENV:computername
+      Name = 'Vagrant'
+      Roles = 'RootAdmin'
+      Ensure = 'Present'
+    }
+    
   if ($UserTokenForEveryone)
   {
     QlikRule LicenseEveryone
