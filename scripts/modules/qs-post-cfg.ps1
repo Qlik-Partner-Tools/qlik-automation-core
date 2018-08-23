@@ -3,12 +3,13 @@ Module:             qs-post-cfg
 Author:             Clint Carr
 Modified by:        -
 Modification History:
+ - Added a loop into the Connect-Qlik statement to remove an abort error
  - Added Logging
  - Added comments
  - Error checking
  - Modified service connection for Qlik Sense from endless loop to a set number of attempts.
  - Added a service restart at the end of the Central Node (seems to resolve an issue with April 2018)
-last updated:       05/22/2018
+last updated:       07/23/2018
 Intent: Configure the Qlik Sense environment with applications and Security Rules.
 #>
 if(!(Test-Path c:\qmi\QMIError)){
@@ -91,16 +92,9 @@ if(!(Test-Path c:\qmi\QMIError)){
             restartQse
 
             ### Connect to the Qlik Sense Repository Service with Qlik-Cli
-            try
-            {
-                Connect-Qlik $env:COMPUTERNAME -UseDefaultCredentials
-            }
-            catch
-            {
-                Write-Log -Message $_.Exception.Message -Severity "Error"
-                New-Item c:\qmi\QMIError -Force -ItemType File | Out-Null
-                Exit
-            }
+            do {write-log -Message "Connecting to Qlik Sense Repository"; start-sleep 15} 
+            While( (Connect-Qlik $($env:COMPUTERNAME) -TrustAllCerts -UseDefaultCredentials -ErrorAction SilentlyContinue).length -eq 0 )
+            
             ### Apply the License to the Qlik Sense server
             Write-Log -Message "Setting license: $($license.sense.serial)"
             try
