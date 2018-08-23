@@ -9,4 +9,19 @@ module CustomSetup
     end
     return out
   end
+  
+  def self.isFreeDiskSpace( scenario )
+    if scenario["diskspaceGb"] then
+      if File.exists?('C:\\') then
+        # Windows
+        gb_available = `dir /-C`.match(/(\d+) bytes free/).captures[0].to_i/1024/1024/1024
+      else
+        # Unix
+        gb_available = `df .`.match(/(\d+)\s*\d*%/).captures[0].to_i*512/1024/1024/1024
+      end		
+      return gb_available > scenario["diskspaceGb"]
+    else
+      return true
+    end
+  end
 end
