@@ -3,21 +3,18 @@ Module:             qs-post-cfg
 Author:             Clint Carr
 Modified by:        -
 Modification History:
+ - Added logic to accomodate for Professional/Analyzer or User licenses 
  - Added a loop into the Connect-Qlik statement to remove an abort error
  - Added Logging
  - Added comments
  - Error checking
  - Modified service connection for Qlik Sense from endless loop to a set number of attempts.
  - Added a service restart at the end of the Central Node (seems to resolve an issue with April 2018)
-last updated:       07/23/2018
+last updated:       08/24/2018
 Intent: Configure the Qlik Sense environment with applications and Security Rules.
 #>
 if(!(Test-Path c:\qmi\QMIError)){
     Write-Log -Message "Starting qs-post-cfg.ps1"
-    $license = (Get-Content c:\shared-content\licenses\qlik-license.json -raw) | ConvertFrom-Json
-    if ( (Test-Path c:\shared-content-plus\licenses\qlik-license.json) ) {
-        $license = (Get-Content c:\shared-content-plus\licenses\qlik-license.json -raw) | ConvertFrom-Json
-    }
     $scenario = (Get-Content c:\vagrant\scenario.json -raw) | ConvertFrom-Json
 
     ### Waiting for Qlik Sense installation to complete
@@ -60,6 +57,56 @@ if(!(Test-Path c:\qmi\QMIError)){
         Restart-Service QlikSenseSchedulerService -Force
     }
 
+ Function qlikSenseUserAccess
+    {
+        $userAccessGroup = (@{name = "License Everyone";} | ConvertTo-Json -Compress -Depth 10)
+            $licenseId = Invoke-QlikPost "/qrs/License/UserAccessGroup" $userAccessGroup
+            $systemRuleJson = (@{
+                name = "Grant Everyone a token";
+                category = "License";
+                rule = '((user.name like "*"))';
+                type = "Custom";
+                resourceFilter = "License.UserAccessGroup_" + $licenseId.id;
+                actions = 1;
+                ruleContext = "QlikSenseOnly";
+                disabled = $false;
+                comment = "Rule to set up automatic user access";} | ConvertTo-Json -Compress -Depth 10)
+            Write-Log -Message "Adding user license rule to grant Everyone Tokens."
+            try
+            {
+                Invoke-QlikPost "/qrs/SystemRule" $systemRuleJson | Out-Null
+            }
+            catch
+            {
+                Write-Log -Message $_.Exception.Message -Severity "Error"
+            }
+    }
+
+    Function qlikSenseProfessionalAccess
+    {
+           $professionalAccessGroup = (@{name = "License Everyone";} | ConvertTo-Json -Compress -Depth 10)
+            $licenseId = Invoke-QlikPost "/qrs/License/ProfessionalAccessGroup" $professionalAccessGroup
+            $systemRuleJson = (@{
+                name = "Grant Everyone Professional Access";
+                category = "License";
+                rule = '((user.name like "*"))';
+                type = "Custom";
+                resourceFilter = "License.ProfessionalAccessGroup_" + $licenseId.id;
+                actions = 1;
+                ruleContext = "QlikSenseOnly";
+                disabled = $false;
+                comment = "Rule to set up automatic user access";} | ConvertTo-Json -Compress -Depth 10)
+            Write-Log -Message "Adding user license rule to grant Everyone access as Professional."
+            try
+            {
+                Invoke-QlikPost "/qrs/SystemRule" $systemRuleJson | Out-Null
+            }
+            catch
+            {
+                Write-Log -Message $_.Exception.Message -Severity "Error"
+            }
+    }
+
     #-----------
     write-log -Message "Waiting three minutes for Qlik Sense installation to complete"
     start-sleep -s 180
@@ -95,38 +142,43 @@ if(!(Test-Path c:\qmi\QMIError)){
             do {write-log -Message "Connecting to Qlik Sense Repository"; start-sleep 15} 
             While( (Connect-Qlik $($env:COMPUTERNAME) -TrustAllCerts -UseDefaultCredentials -ErrorAction SilentlyContinue).length -eq 0 )
             
-            ### Apply the License to the Qlik Sense server
-            Write-Log -Message "Setting license: $($license.sense.serial)"
-            try
-            {
-                Set-QlikLicense -serial $license.sense.serial -control $license.sense.control -name "$($license.sense.name)" -organization "$($license.sense.organization)" -lef "$($license.sense.lef)" | Out-Null
+            $license = (Get-Content c:\shared-content\licenses\qlik-license.json -raw) | ConvertFrom-Json
+            if ( (Test-Path c:\shared-content-plus\licenses\qlik-license.json) ) {
+                $license = (Get-Content c:\shared-content-plus\licenses\qlik-license.json -raw) | ConvertFrom-Json
             }
-            catch
-            {
-                Write-Log -Message $_.Exception.Message -Severity "Error"
-            }
-            ### Create a user security rule to grant everyone a token
-            $userAccessGroup = (@{name = "License Everyone";} | ConvertTo-Json -Compress -Depth 10)
-            $licenseId = Invoke-QlikPost "/qrs/License/UserAccessGroup" $userAccessGroup
-            $systemRuleJson = (@{
-                name = "Grant Everyone a token";
-                category = "License";
-                rule = '((user.name like "*"))';
-                type = "Custom";
-                resourceFilter = "License.UserAccessGroup_" + $licenseId.id;
-                actions = 1;
-                ruleContext = "QlikSenseOnly";
-                disabled = $false;
-                comment = "Rule to set up automatic user access";} | ConvertTo-Json -Compress -Depth 10)
-            Write-Log -Message "Adding user license rule to grant Everyone Tokens."
-            try
-            {
-                Invoke-QlikPost "/qrs/SystemRule" $systemRuleJson | Out-Null
-            }
-            catch
-            {
-                Write-Log -Message $_.Exception.Message -Severity "Error"
-            }
+                if ($server.sense.license -eq "token" )
+                    {
+                        $license = (Get-Content c:\shared-content\licenses\qlik-license.json -raw) | ConvertFrom-Json
+                        if ( (Test-Path c:\shared-content-plus\licenses\qlik-license.json) ) 
+                        {
+                            $license = (Get-Content c:\shared-content-plus\licenses\qlik-license.json -raw) | ConvertFrom-Json
+                        }
+
+                        Write-Log -Message "Setting license: $($license.sense.serial)"
+                        try
+                        {
+                            Set-QlikLicense -serial $license.sense.serial -control $license.sense.control -name "$($license.sense.name)" -organization "$($license.sense.organization)" -lef "$($license.sense.lef)" | Out-Null
+                        }
+                        catch
+                        {
+                            Write-Log -Message $_.Exception.Message -Severity "Error"
+                        }
+                        qlikSenseUserAccess
+                    }
+                else {
+                        Write-Log -Message "Setting license: $($license.sensepa.serial)"
+                        try
+                        {
+                            Set-QlikLicense -serial $license.sensepa.serial -control $license.sensepa.control -name "$($license.sensepa.name)" -organization "$($license.sensepa.organization)" -lef "$($license.sensepa.lef)" | Out-Null
+                        }
+                        catch
+                        {
+                            Write-Log -Message $_.Exception.Message -Severity "Error"
+                        }
+                    qlikSenseProfessionalAccess
+                }
+
+                
             ### Add the Qlik local user to Qlik Sense
             $json = (@{userId = "qlik";
                         userDirectory = $env:COMPUTERNAME;
