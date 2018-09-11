@@ -1,7 +1,7 @@
 $qsVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
 
 write-log -Message "Installing $qsVer.name"
-if ( $qsVer.name -like "QlikView Server November 2017*"){
+if ( $qsVer.name -like "QlikView Server November 201*"){
     start-process -filepath c:\shared-content\scripts\modules\qv-installNov-iis.bat -wait
 }
 else
