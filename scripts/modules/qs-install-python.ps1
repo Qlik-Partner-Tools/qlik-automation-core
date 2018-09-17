@@ -3,7 +3,8 @@ Module:             qs-install-python
 Author:             Clint Carr
 Modified by:        
 Modification History:
-last updated:       11/2/2017
+    - Updated for Python 3.7
+last updated:       09/18/2018
 Intent: Configure and install Python and modules for AAI
 #>
 
@@ -29,7 +30,7 @@ New-Item -ItemType directory -Path C:\python\venv\QlikSenseAAI\geocoding -ea Sto
 
 #create a python virtual environment called QlikSenseAAI
 Write-Log -Message "Creating Python Virtual Environment"
-c:\python36\python -m venv c:\python\venv\QlikSenseAAI
+c:\python37\python -m venv c:\python\venv\QlikSenseAAI
 cd c:\python\venv\QlikSenseAAI
 
 #Activate the virtual environment
