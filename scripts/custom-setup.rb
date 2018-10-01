@@ -5,9 +5,18 @@ module CustomSetup
   	out = scenario["config"];
     customFilePath = File.join(File.dirname(__FILE__),'..', '..', 'setup', scenario["name"] +"_conf.json")
     if File.exist?(customFilePath) then
-        out = JSON.parse(File.read(customFilePath))
-    end
-    return out
+      out2 = JSON.parse(File.read(customFilePath))
+      out2["servers"].zip(out["servers"]).each do |o2s, o1s|
+        o1s.each do |key, value|
+          if o2s[key] == nil then
+            o2s[key] = o1s[key]
+          end
+        end   
+      end  
+      return out2
+    else
+      return out
+    end  
   end
   
   def self.isFreeDiskSpace( scenario )
