@@ -1,22 +1,36 @@
 # module1.rb
 module CustomSetup
-  def self.getValues( scenario )
-  # Check custom values for provision
-  	out = scenario["config"];
+  
+  def self.getValues( scenario, scenarioPath = nil )
+    
+    scenarioConfig = scenario["config"];
+    
+    # Check custom values for provision
     customFilePath = File.join(File.dirname(__FILE__),'..', '..', 'setup', scenario["name"] +"_conf.json")
     if File.exist?(customFilePath) then
-      out2 = JSON.parse(File.read(customFilePath))
-      out2["servers"].zip(out["servers"]).each do |o2s, o1s|
+      
+      out = JSON.parse(File.read(customFilePath))
+      out["servers"].zip(scenarioConfig["servers"]).each do |o2s, o1s|
         o1s.each do |key, value|
           if o2s[key] == nil then
             o2s[key] = o1s[key]
           end
         end   
       end  
-      return out2
-    else
-      return out
-    end  
+      
+      # Write custom config to scenario.json
+      if scenarioPath then
+        scenario["config"] = out
+        File.open(File.join(scenarioPath, 'scenario.json'),"w") do |f|
+          f.write(scenario.to_json)
+        end
+      end
+
+    else 
+      out = scenarioConfig
+    end
+
+    return out   
   end
   
   def self.isFreeDiskSpace( scenario )
