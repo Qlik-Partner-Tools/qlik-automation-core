@@ -3,13 +3,23 @@ Module:             qs-install
 Author:             Clint Carr
 Modified by:        -
 Modification History:
+ - Added functionality to support the certified extension bundle
  - Added Logging
  - Added comments
  - Sent output to Null
  - Changed installation to an Invoke-Command script block
-last updated:       10/11/2017
+last updated:       09/11/2018
 Intent: Install the selected version of Qlik Sense
 #>
+
+# These versions do not have the dashboardbundle as an installer option
+$qsVersions = @("Qlik Sense September 2018","Qlik Sense June 2018 Patch 1","Qlik Sense June 2018","Qlik Sense April 2018 Patch 1",
+            "Qlik Sense April 2018","Qlik Sense February 2018","Qlik Sense November 2017 Patch 2","Qlik Sense November 2017 Patch 1", 
+            "Qlik Sense November 2017","Qlik Sense September 2017 Patch 1","Qlik Sense September 2017","Qlik Sense June 2017 Patch 3",
+            "Qlik Sense June 2017 Patch 2","Qlik Sense June 2017 Patch 1","Qlik Sense June 2017","Qlik Sense 3.2 SR5","Qlik Sense 3.2 SR4",
+            "Qlik Sense 3.2 SR3","Qlik Sense 3.2 SR2","Qlik Sense September 2018 pre-release")
+
+$qsVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
 
 Write-Log -Message "Starting qs-install.ps1"
 $scenario = (Get-Content c:\vagrant\scenario.json -raw) | ConvertFrom-Json
@@ -29,7 +39,14 @@ foreach ($server in $scenario.config.servers)
         {
             Write-Log -Message "Installing Qlik Sense Server from c:\shared-content\binaries"
             Unblock-File -Path C:\shared-content\binaries\Qlik_Sense_setup.exe
-            Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass)  spc=c:\installation\sp_config.xml" -Wait -PassThru} | Out-Null
+            if ($qsVersions -notcontains $qsVer.name)
+                {
+                    Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass) dashboardbundle=1 spc=c:\installation\sp_config.xml" -Wait -PassThru} | Out-Null
+                }
+            else
+                {
+                    Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass) spc=c:\installation\sp_config.xml" -Wait -PassThru} | Out-Null
+                }
         }
         else
         {
