@@ -93,6 +93,25 @@ if ( -Not (Test-Path $path\Qlik_Sense_setup.exe))
                 (New-Object System.Net.WebClient).DownloadFile($url2, $dlLoc)
             }
         }
+         elseif ($selVer.name -like "*November 2018 Patch*") {
+            if (Test-Path "$bin\Qlik Sense November 2018\Qlik_Sense_setup.exe")
+            {
+                  Write-Log -Message "November binary found, copying existing binary"
+                  cp "$bin\Qlik Sense November 2018\Qlik_Sense_setup.exe" $path\Qlik_Sense_setup.exe
+                  Write-Log -Message "Downloading $filename from $url to $dlLoc"
+                  (New-Object System.Net.WebClient).DownloadFile($url, $dlLoc)
+            }
+            else
+            {
+                Write-Log -Message "Downloading base binary." -Severity "Warn"
+                (New-Object System.Net.WebClient).DownloadFile($url, $dlLoc)
+                $url2 = $selVer.url2
+                $fileName = $url2.Substring($url2.LastIndexOf("/") + 1)
+                $dlLoc = join-path $path $fileName
+                Write-Log -Message "Downloading $file from $url to $dlLoc"
+                (New-Object System.Net.WebClient).DownloadFile($url2, $dlLoc)
+            }
+        }
         else
         {
             Write-Log -Message "Downloading $file from $url to $dlLoc"  -Severity "Warn"
