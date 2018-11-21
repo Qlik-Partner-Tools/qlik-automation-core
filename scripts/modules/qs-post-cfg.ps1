@@ -281,13 +281,13 @@ if(!(Test-Path c:\qmi\QMIError)){
             $apps = gci c:\shared-content\apps\ -Directory
             foreach ($subDirectory in $apps)
             {
-                $encodeDirectory = [System.Web.HttpUtility]::UrlEncode($subDirectory);
-                $streams = $(Get-QlikStream -filter "name eq '$($encodeDirectory)'").name
+                # $encodeDirectory = [System.Web.HttpUtility]::UrlEncode($subDirectory);
+                $streams = $(Get-QlikStream -filter "name eq '$($subDirectory)'").name
                 if ($streams -ne $subDirectory)
                     {
                         Write-Log -Message "Creating $subDirectory stream"
                         New-QlikStream $subDirectory | Out-Null;
-                        $streamId = $(Get-QlikStream -filter "name eq '$($encodeDirectory)'").id
+                        $streamId = $(Get-QlikStream -filter "name eq '$($subDirectory)'").id
                         $systemRuleJson = (@{
                             name = "Grant everyone access to $subDirectory";
                             category = "Security";
@@ -304,12 +304,12 @@ if(!(Test-Path c:\qmi\QMIError)){
             $files = gci C:\shared-content\apps\$subDirectory\*.qvf -File
             foreach ($file in $files)
                 {
-                    $streamId = $(Get-QlikStream -filter "name eq '$($encodeDirectory)'").id
-                    $encode = [System.Web.HttpUtility]::UrlEncode($file.BaseName)
+                    $streamId = $(Get-QlikStream -filter "name eq '$($subDirectory)'").id
+                    # $encode = [System.Web.HttpUtility]::UrlEncode($file.BaseName)
                     Write-Log -Message "Importing $($file)";
-                    Import-QlikApp -name $encode -file $file.FullName -upload  | Out-Null;
-                    Write-Log -Message "Publishing $($encode) to $($encodeDirectory)";
-                    publish-qlikapp -id $(get-qlikapp -filter "name eq '$($encode)'").id -stream $streamId -name $encode  | Out-Null
+                    Import-QlikApp -name $file.BaseName -file $file.FullName -upload  | Out-Null;
+                    Write-Log -Message "Publishing $($file.BaseName) to $($subDirectory)";
+                    publish-qlikapp -id $(get-qlikapp -filter "name eq '$($file.BaseName)'").id -stream $streamId -name $file.BaseName  | Out-Null
                 }
             }
             ### Updating White List
