@@ -19,6 +19,8 @@ $qsVersions = @("Qlik Sense September 2018","Qlik Sense June 2018 Patch 1","Qlik
             "Qlik Sense June 2017 Patch 2","Qlik Sense June 2017 Patch 1","Qlik Sense June 2017","Qlik Sense 3.2 SR5","Qlik Sense 3.2 SR4",
             "Qlik Sense 3.2 SR3","Qlik Sense 3.2 SR2","Qlik Sense September 2018 pre-release")
 
+$qsVersionDashOnly = @("Qlik Sense November 2018","Qlik Sense November 2018 Patch 1","Qlik Sense November 2018 Patch 2")
+
 $qsVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
 
 Write-Log -Message "Starting qs-install.ps1"
@@ -39,9 +41,13 @@ foreach ($server in $scenario.config.servers)
         {
             Write-Log -Message "Installing Qlik Sense Server from c:\shared-content\binaries"
             Unblock-File -Path C:\shared-content\binaries\Qlik_Sense_setup.exe
-            if ($qsVersions -notcontains $qsVer.name)
+            if ($qsVersions -notcontains $qsVer.name -and $qsVersions -contains $qsVersionDashOnly)
                 {
                     Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass) dashboardbundle=1 spc=c:\installation\sp_config.xml" -Wait -PassThru} | Out-Null
+                }
+                elseif ($qsVersions -notcontains $qsVer.name -and $qsVersions -notcontains $qsVersionDashOnly)
+                {
+                    Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass) dashboardbundle=1 visualizationbundle=1 spc=c:\installation\sp_config.xml" -Wait -PassThru} | Out-Null
                 }
             else
                 {
