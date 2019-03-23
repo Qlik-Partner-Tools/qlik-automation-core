@@ -15,7 +15,7 @@ Intent: Install the selected version of Qlik Sense
 #>
 
 # These versions do not have the dashboardbundle as an installer option
-$qsVersions = @("Qlik Sense September 2018","Qlik Sense June 2018 Patch 1","Qlik Sense June 2018","Qlik Sense April 2018 Patch 1",
+$qsVersions = @("Qlik Sense April 2019 pre-release","Qlik Sense September 2018","Qlik Sense June 2018 Patch 1","Qlik Sense June 2018","Qlik Sense April 2018 Patch 1",
             "Qlik Sense April 2018","Qlik Sense February 2018","Qlik Sense November 2017 Patch 2","Qlik Sense November 2017 Patch 1", 
             "Qlik Sense November 2017","Qlik Sense September 2017 Patch 1","Qlik Sense September 2017","Qlik Sense June 2017 Patch 3",
             "Qlik Sense June 2017 Patch 2","Qlik Sense June 2017 Patch 1","Qlik Sense June 2017","Qlik Sense 3.2 SR5","Qlik Sense 3.2 SR4",
