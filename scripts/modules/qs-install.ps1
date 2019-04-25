@@ -24,6 +24,8 @@ $qsVersions = @("Qlik Sense April 2019 pre-release","Qlik Sense September 2018",
 # This version only has the dashboard bundle
 $qsVersionDashOnly = @("Qlik Sense November 2018","Qlik Sense November 2018 Patch 1","Qlik Sense November 2018 Patch 2")
 
+$qsVersionBoth = @("Qlik Sense April 2019")
+
 $qsVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
 
 Write-Log -Message "Starting qs-install.ps1"
@@ -44,15 +46,20 @@ foreach ($server in $scenario.config.servers)
         {
             Write-Log -Message "Installing Qlik Sense Server from c:\shared-content\binaries"
             Unblock-File -Path C:\shared-content\binaries\Qlik_Sense_setup.exe
-            if ($qsVersions -contains $qsVersionDashOnly)
+            if ($qsVersionDashOnly -contains $qsVer.name)
                 {
-                    Write-Host -Message "Installing with Dashboard bundle"
+                    Write-log -Message "Installing with Dashboard bundle"
                     Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass) dashboardbundle=1 spc=c:\installation\sp_config.xml" -Wait -PassThru} | Out-Null
                 }
-                elseif ($qsVersions -notcontains $qsVer.name -and $qsVersionDashOnly -notcontains $qsVer.name)
+                elseif ($qsVersions -notcontains $qsVer.name -and $qsVersionDashOnly -notcontains $qsVer.name -and $qsVersionBoth -notcontains $qsVer.name)
                 {
-                    Write-Host -Message "Installing with Dashboard Bundle and Extension Bundle"
+                    Write-log -Message "Installing with Dashboard Bundle and Extension Bundle"
                     Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass) dashboardbundle=1 visualizationbundle=1 spc=c:\installation\sp_config.xml" -Wait -PassThru} | Out-Null
+                }
+                elseif ($qsVersionBoth -contains $qsVer.name)
+                {
+                Write-log -Message "Installing with Dashboard Bundle and Extension Bundle"
+                Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass) bundleinstall=dashboard,visualization spc=c:\installation\sp_config.xml" -Wait -PassThru} | Out-Null
                 }
             else
                 {
