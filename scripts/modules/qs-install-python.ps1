@@ -3,6 +3,7 @@ Module:             qs-install-python
 Author:             Clint Carr
 Modified by:        
 Modification History:
+    - Updated SciPy, Numpy and Pyflux
     - Updated for Python 3.7
 last updated:       09/18/2018
 Intent: Configure and install Python and modules for AAI
@@ -41,16 +42,18 @@ Write-Log -Message "Activating the QlikSenseAAI Virtual Environment"
 Write-Log -Message "Updating Python Setup Tools"
 pip install --upgrade setuptools | Out-Null
 
-Write-Log -Message "Downloading Python wheel files for numpy and scipy"
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-(New-Object System.Net.WebClient).DownloadFile('https://qmi.qlik.com/downloads/files/scipy-1.0.0-cp36-cp36m-win_amd64.whl', 'c:\tmp\scipy-1.0.0-cp36-cp36m-win_amd64.whl')
-(New-Object System.Net.WebClient).DownloadFile('https://qmi.qlik.com/downloads/files/numpy-1.13.3+mkl-cp36-cp36m-win_amd64.whl', 'c:\tmp\numpy-1.13.3+mkl-cp36-cp36m-win_amd64.whl')
+# Write-Log -Message "Downloading Python wheel files for numpy and scipy"
+# [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+# (New-Object System.Net.WebClient).DownloadFile('https://qmi.qlik.com/downloads/files/scipy-1.0.0-cp36-cp36m-win_amd64.whl', 'c:\tmp\scipy-1.0.0-cp36-cp36m-win_amd64.whl')
+# (New-Object System.Net.WebClient).DownloadFile('https://qmi.qlik.com/downloads/files/numpy-1.13.3+mkl-cp36-cp36m-win_amd64.whl', 'c:\tmp\numpy-1.13.3+mkl-cp36-cp36m-win_amd64.whl')
 
 Write-Log -Message "Installing Numpy with MKL"
-pip install c:\tmp\numpy-1.13.3+mkl-cp36-cp36m-win_amd64.whl | Out-Null
+# pip install c:\tmp\numpy-1.13.3+mkl-cp36-cp36m-win_amd64.whl | Out-Null
+pip install numpy
 
 Write-Log -Message "Installing SCIPY"
-pip install c:\tmp\scipy-1.0.0-cp36-cp36m-win_amd64.whl | Out-Null
+# pip install c:\tmp\scipy-1.0.0-cp36-cp36m-win_amd64.whl | Out-Null
+pip install scipy
 
 # install build tools
 Write-Log -Message "Installing Visual Studio 2015 Build Tools (C++)"
@@ -60,7 +63,8 @@ Write-Log "Installing PANDAS"
 pip install pandas | Out-Null
 
 Write-Log -Message "Installing Pyflux"
-pip install pyflux  | Out-Null
+# pip install pyflux  | Out-Null
+pip install c:\vagrant\files\pyflux-0.4.17-cp37-cp37m-win_amd64.whl | Out-Null
 
 Write-Log -Message "Installing GRPCIO"
 pip install grpcio  | Out-Null
