@@ -42,6 +42,8 @@ New-NetFirewallRule -DisplayName "Qlikview" -Direction Inbound -LocalPort 4780, 
 
 if ($QlikViewConfig.config.webServer -eq "iis")
 {
+    write-log "Disabling Carbon due to namespace clash"
+    Remove-Module "carbon"
     import-module servermanager | Out-Null
     Write-Log -Message "Installing IIS Server - This may take a couple of minutes"
     # Configure Windows Features
