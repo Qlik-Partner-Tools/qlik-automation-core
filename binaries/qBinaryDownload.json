@@ -138,6 +138,14 @@
     ],
     "qlikview": [
         {
+            "name": "QlikView Server April 2019 SR1",
+            "url": "https://da3hntz84uekx.cloudfront.net/qlikview/12.40/124020100/_MSI/QlikViewServer_x64Setup.exe"
+        },
+        {
+            "name": "QlikView Server April 2019",
+            "url": "https://da3hntz84uekx.cloudfront.net/qlikview/12.40/124020000/_MSI/QlikViewServer_x64Setup.exe"
+        },
+        {
             "name": "QlikView Server November 2018",
             "url": "https://da3hntz84uekx.cloudfront.net/qlikview/12.30/123020000/_MSI/QlikViewServer_x64Setup.exe"
         },
