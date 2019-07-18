@@ -4,9 +4,9 @@ module CustomSetup
   def self.getValues( scenario, scenarioPath = nil )
     
     scenarioConfig = scenario["config"];
-    
+    setupFile = scenario["name"] +"_v"+scenario["version"].to_s+"_conf.json";
     # Check custom values for provision
-    customFilePath = File.join(File.dirname(__FILE__),'..', '..', 'setup', scenario["name"] +"_v"+scenario["version"]+"_conf.json")
+    customFilePath = File.join(File.dirname(__FILE__),'..', '..', 'setup', setupFile)
     if File.exist?(customFilePath) then
       
       out = JSON.parse(File.read(customFilePath))
