@@ -33,3 +33,6 @@ if ( (Test-Path c:\shared-content-plus\licenses\qlik-license.json) ) {
 }
 Write-Log -Message "Setting QlikView License"
 c:\\installation\\post-install\\set-license.exe -serial $license.qlikview.serial -control $license.qlikview.control -name "$($license.qlikview.name)" -organization "$($license.qlikview.organization)"
+
+Write-Log -Message "Restarting QVS so it accepts license"
+Restart-Service QlikviewServer

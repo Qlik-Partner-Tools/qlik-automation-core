@@ -55,6 +55,7 @@ cmd.exe /c winrm set winrm/config `@`{MaxEnvelopeSizekb=\`"8192\`"`}  | Out-Null
 
 # add service account to local administrators group
 Write-Log -Message "Adding service account to local administrators group."
+Import-Module "Carbon"
 Add-GroupMember -Name 'Administrators' -Member $env:COMPUTERNAME\qservice -ea Stop  | Out-Null
 
 # open windows firewall

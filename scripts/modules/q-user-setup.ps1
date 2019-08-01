@@ -28,6 +28,7 @@ rm -force c:\secpol.cfg -confirm:$false  | Out-Null
 ### Install Carbon PowerShell Module
 Write-Log -Message "Installing carbon"
 cinst carbon -y | Out-Null
+import-module "Carbon"
 
 ### create Qlik User
 Install-User -UserName Qlik -Password Qlik1234
