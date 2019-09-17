@@ -3,10 +3,11 @@ Module:             qs-initial-cfg
 Author:             Clint Carr
 Modified by:        Adam Haydon
 Modification History:
+ - added nPrinting ports
  - Added new installation method for Qlik-Cli (via NuGet)
  - Added Logging
  - Added comments
-last updated:       11/06/2017
+last updated:       17/09/2019
 Intent: Configure Server for Qlik Sense installation.
 #>
 
@@ -59,6 +60,6 @@ Import-Module "Carbon"
 Add-GroupMember -Name 'Administrators' -Member $env:COMPUTERNAME\qservice -ea Stop  | Out-Null
 
 # open windows firewall
-Write-Log "Opening Firewall ports 443/4244, 80/4248; iPortal 3090; Session-Apps 4000; Ticket 5000-6000;"
-New-NetFirewallRule -DisplayName "Qlik Sense" -Direction Inbound -LocalPort 443, 4244,4242, 4432, 4444, 5355, 5353, 80, 4248, 3090, 4000, 5555, 5556 -Protocol TCP -Action Allow -ea Stop | Out-Null
+Write-Log "Opening Firewall ports 443/4244, 80/4248; iPortal 3090; Session-Apps 4000; Ticket 5000-6000; nPrinting 4993-4994"
+New-NetFirewallRule -DisplayName "Qlik Sense" -Direction Inbound -LocalPort 443, 4244,4242, 4432, 4444, 5355, 5353, 80, 4248, 3090, 4000, 5555, 5556, 4993, 4994 -Protocol TCP -Action Allow -ea Stop | Out-Null
 
