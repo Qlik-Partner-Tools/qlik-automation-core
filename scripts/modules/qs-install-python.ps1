@@ -98,7 +98,7 @@ Copy-Item 'c:\tmp\DPI - MODULE - Qlik Sense AAI & Python ARIMA Forecasting\DPI -
 
 ### Import scenario applications
 Write-Log -Message "Connecting as user Qlik to QRS"
-Connect-Qlik -username "$env:COMPUTERNAME\qlik" | Out-Null
+gci cert:\CurrentUser\My | where {$_.issuer -eq $cert} | Connect-Qlik -username "$env:COMPUTERNAME\qlik" | Out-Null
 
 Write-Log -Message "Importing applications"
 If (Test-Path "c:\python\venv\QlikSenseAAI\arima\") {
@@ -129,7 +129,8 @@ Write-Log -Message "Copying content"
 Copy-Item 'c:\tmp\DPI - MODULE - Qlik Sense AAI & Python Sentiment Analysis\Sentiment\*' c:\python\venv\QlikSenseAAI\sentiment\
 
 Write-Log -Message "Connecting as user Qlik to QRS"
-Connect-Qlik -username "$env:COMPUTERNAME\qlik" | Out-Null
+
+gci cert:\CurrentUser\My | where {$_.issuer -eq $cert} | Connect-Qlik -username "$env:COMPUTERNAME\qlik" | Out-Null
 
 Write-Log -Message "Importing applications"
 If (Test-Path "c:\python\venv\QlikSenseAAI\sentiment\") {
@@ -160,7 +161,7 @@ Write-Log -Message "Copying content"
 Copy-Item 'c:\tmp\DPI - MODULE - Qlik Sense AAI & Python Geocoding\Geocoding\*' c:\python\venv\QlikSenseAAI\geocoding\
 
 Write-Log -Message "Connecting as user Qlik to QRS"
-Connect-Qlik -username "$env:COMPUTERNAME\qlik" | Out-Null
+gci cert:\CurrentUser\My | where {$_.issuer -eq $cert} | Connect-Qlik -username "$env:COMPUTERNAME\qlik" | Out-Null
 
 Write-Log -Message "Importing applications"
 If (Test-Path "c:\python\venv\QlikSenseAAI\geocoding\") {

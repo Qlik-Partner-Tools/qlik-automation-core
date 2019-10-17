@@ -3,6 +3,7 @@ Module:             qs-post-cfg
 Author:             Clint Carr
 Modified by:        -
 Modification History:
+ - Fixed connect as user logic (qlik-cli change)
  - Added logic to accomodate for Professional/Analyzer or User licenses 
  - Added a loop into the Connect-Qlik statement to remove an abort error
  - Added Logging
@@ -10,7 +11,7 @@ Modification History:
  - Error checking
  - Modified service connection for Qlik Sense from endless loop to a set number of attempts.
  - Added a service restart at the end of the Central Node (seems to resolve an issue with April 2018)
-last updated:       08/24/2018
+last updated:       10/18/2019
 Intent: Configure the Qlik Sense environment with applications and Security Rules.
 #>
 if(!(Test-Path c:\qmi\QMIError)){
@@ -240,7 +241,8 @@ if(!(Test-Path c:\qmi\QMIError)){
             Write-Log -Message "Connecting as user Qlik to QRS"
             try
             {
-                Connect-Qlik -username "$env:COMPUTERNAME\qlik" | Out-Null
+                $cert = "CN=$env:COMPUTERNAME-ca"
+                gci cert:\CurrentUser\My | where {$_.issuer -eq $cert} | Connect-Qlik -username "$env:COMPUTERNAME\qlik" | Out-Null
             }
             catch
             {
