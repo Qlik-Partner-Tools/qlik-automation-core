@@ -3,6 +3,7 @@ Module:             qs-install
 Author:             Clint Carr
 Modified by:        -
 Modification History:
+ - Added November Techb preview
  - Bug in extension pack code
  - Added functionality to support the certified visualization bundle
  - Added functionality to support the certified extension bundle
@@ -10,7 +11,7 @@ Modification History:
  - Added comments
  - Sent output to Null
  - Changed installation to an Invoke-Command script block
-last updated:       02/28/2019
+last updated:       22/10/2019
 Intent: Install the selected version of Qlik Sense
 #>
 
@@ -24,7 +25,7 @@ $qsVersions = @("Qlik Sense April 2019 pre-release","Qlik Sense September 2018",
 # This version only has the dashboard bundle
 $qsVersionDashOnly = @("Qlik Sense November 2018","Qlik Sense November 2018 Patch 1","Qlik Sense November 2018 Patch 2")
 
-$qsVersionBoth = @("Qlik Sense April 2019", "Qlik Sense June 2019 pre-release", "Qlik Sense June 2019", "Qlik Sense September 2019")
+$qsVersionBoth = @("Qlik Sense April 2019", "Qlik Sense June 2019 pre-release", "Qlik Sense June 2019", "Qlik Sense September 2019", "Qlik Sense November 2019 pre-release", "Qlik Sense November 2019" )
 
 $qsVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
 
