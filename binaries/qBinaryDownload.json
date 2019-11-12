@@ -1,6 +1,15 @@
 {
     "qliksense": [
         {
+            "name": "Qlik Sense November 2019",
+            "url": "https://da3hntz84uekx.cloudfront.net/QlikSense/13.51/0/_MSI/Qlik_Sense_setup.exe"
+        },
+        {
+            "name": "Qlik Sense September 2019 Patch 1",
+            "url": "https://da3hntz84uekx.cloudfront.net/QlikSense/13.42/1/_MSI/Qlik_Sense_update.exe",
+            "url2": "https://da3hntz84uekx.cloudfront.net/QlikSense/13.42/0/_MSI/Qlik_Sense_setup.exe"
+        },
+        {
             "name": "Qlik Sense September 2019",
             "url": "https://da3hntz84uekx.cloudfront.net/QlikSense/13.42/0/_MSI/Qlik_Sense_setup.exe"
         },{
