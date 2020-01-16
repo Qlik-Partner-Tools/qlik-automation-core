@@ -25,7 +25,14 @@ $qsVersions = @("Qlik Sense April 2019 pre-release","Qlik Sense September 2018",
 # This version only has the dashboard bundle
 $qsVersionDashOnly = @("Qlik Sense November 2018","Qlik Sense November 2018 Patch 1","Qlik Sense November 2018 Patch 2")
 
-$qsVersionBoth = @("Qlik Sense April 2019", "Qlik Sense June 2019 pre-release", "Qlik Sense June 2019", "Qlik Sense September 2019", "Qlik Sense November 2019 pre-release", "Qlik Sense November 2019", "Qlik Sense February 2020 pre-release" )
+$qsVersionBoth = @("Qlik Sense April 2019", 
+                    "Qlik Sense June 2019 pre-release", 
+                    "Qlik Sense June 2019", 
+                    "Qlik Sense September 2019", 
+                    "Qlik Sense November 2019 pre-release", 
+                    "Qlik Sense November 2019",
+                    "Qlik Sense September 2019 Patch 1", 
+                    "Qlik Sense February 2020 pre-release" )
 
 $qsVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
 
