@@ -32,7 +32,8 @@ $qsVersionBoth = @("Qlik Sense April 2019",
                     "Qlik Sense November 2019 pre-release", 
                     "Qlik Sense November 2019",
                     "Qlik Sense September 2019 Patch 1", 
-                    "Qlik Sense February 2020 pre-release" )
+                    "Qlik Sense February 2020 pre-release", 
+                    "Qlik Sense February 2020" )
 
 $qsVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
 
