@@ -1,6 +1,10 @@
 {
     "qliksense": [
         {
+            "name": "Qlik Sense February 2020",
+            "url": "https://da3hntz84uekx.cloudfront.net/QlikSense/13.62/0/_MSI/Qlik_Sense_setup.exe"
+        },
+        {
             "name": "Qlik Sense November 2019",
             "url": "https://da3hntz84uekx.cloudfront.net/QlikSense/13.51/0/_MSI/Qlik_Sense_setup.exe"
         },
