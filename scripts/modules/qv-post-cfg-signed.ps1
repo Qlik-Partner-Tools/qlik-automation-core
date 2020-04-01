@@ -34,8 +34,11 @@ if ( (Test-Path c:\shared-content-plus\licenses\qlik-license.json) ) {
 Write-Log -Message "Setting QlikView License"
 #c:\\installation\\post-install\\set-license.exe -serial $license.qlikview.serial -control $license.qlikview.control -name "$($license.qlikview.name)" -organization "$($license.qlikview.organization)"
 c:\\shared-content\\scripts\\qv-set-license\\qv-set-license.exe localhost SIGNED $license.qliksigned.key
-Write-Log -Message "Restarting QVS so it accepts license"
 
 #copy published documents to source documents
-#Copy-Item c:\\programdata\\qliktech\\*.qvw c:\\programdata\\qliktech\\
-Restart-Service QlikviewServer
+Copy-Item c:\\programdata\\qliktech\\Documents*.qvw c:\\programdata\\qliktech\\SourceDocuments\\ -Force
+
+# Write-Log -Message "Restarting QVS so it accepts license"
+# Restart-Service QlikviewManagementService
+# Restart-Service QlikviewServer
+# Restart-Service QlikviewDistributionService
