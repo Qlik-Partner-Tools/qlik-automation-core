@@ -36,7 +36,7 @@ Write-Log -Message "Setting QlikView License"
 c:\\shared-content\\scripts\\qv-set-license\\qv-set-license.exe $Env:Computername SIGNED $license.qliksigned.key
 
 #copy published documents to source documents
-Copy-Item c:\\programdata\\qliktech\\Documents*.qvw c:\\programdata\\qliktech\\SourceDocuments\\ -Force
+Copy-Item c:\\programdata\\qliktech\\Documents\\*.qvw c:\\programdata\\qliktech\\SourceDocuments\\ -Force
 
 # Write-Log -Message "Restarting QVS so it accepts license"
 # Restart-Service QlikviewManagementService
