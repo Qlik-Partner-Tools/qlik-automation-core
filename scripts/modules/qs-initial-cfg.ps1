@@ -39,6 +39,8 @@ foreach ($server in $scenario.config.servers)
     }
 }
 # download and import Qlik-CLI
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 Write-Log -Message "Installing NuGet package provider"
 Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
 Write-Log -Message "Installing DesiredState module"
