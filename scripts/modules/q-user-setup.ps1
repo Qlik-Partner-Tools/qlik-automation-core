@@ -18,6 +18,16 @@ Trap {
   	Break
 }
 
+# The following should be in the base box..
+$ProfileFile = "${PsHome}\Profile.ps1"
+if (! (Test-Path $ProfileFile)) {
+New-Item -Path $ProfileFile -Type file -Force
+}
+''                                                                                | Out-File -FilePath $ProfileFile -Encoding ascii -Append
+'# It is 2018, SSL3 and TLS 1.0 are no good anymore'                              | Out-File -FilePath $ProfileFile -Encoding ascii -Append
+'[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12' | Out-File -FilePath $ProfileFile -Encoding ascii -Append
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 ### Disable Password policy
 Write-Log -Message "Disabling Password Complexity"
 secedit /export /cfg c:\secpol.cfg  | Out-Null
