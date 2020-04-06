@@ -19,6 +19,7 @@ Trap {
 }
 
 # The following should be in the base box..
+Write-Log -Message "Setting TLS 1.2 for Powershell"
 $ProfileFile = "${PsHome}\Profile.ps1"
 if (! (Test-Path $ProfileFile)) {
 New-Item -Path $ProfileFile -Type file -Force
