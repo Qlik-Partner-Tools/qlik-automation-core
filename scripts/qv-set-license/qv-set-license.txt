@@ -1,0 +1,9 @@
+Usage:
+  Set a LEF license:
+    qv-set-license.exe <qms-server-hostname> LEF <QVS/PUBLISHER> <license-number> <control-number> <your-name> <your-organization>
+  Set a signed license:
+    qv-set-license.exe <qms-server-hostname> SIGNED <license-jwt>
+Exit codes:
+  0 = OK
+  1 = Failed to apply license
+  2 = Missing or erroneous arguments
