@@ -33,8 +33,8 @@ $license = (Get-Content c:\shared-content\licenses\qlik-license.json -raw) | Con
 if ( (Test-Path c:\shared-content-plus\licenses\qlik-license.json) ) {
     $license = (Get-Content c:\shared-content-plus\licenses\qlik-license.json -raw) | ConvertFrom-Json
 }
-Write-Log -Message "Setting QlikView License"
-c:\\installation\\post-install\\set-license.exe -serial $license.qlikview.serial -control $license.qlikview.control -name "$($license.qlikview.name)" -organization "$($license.qlikview.organization)"
+# Write-Log -Message "Setting QlikView License"
+# c:\\installation\\post-install\\set-license.exe -serial $license.qlikview.serial -control $license.qlikview.control -name "$($license.qlikview.name)" -organization "$($license.qlikview.organization)"
 
 # we don't have any multinode QV scenarios so assuming it's the first entry..
 if ($scenario.config.servers[0].license -eq "signed" )

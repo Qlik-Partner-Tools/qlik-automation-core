@@ -45,11 +45,12 @@ if ($QlikViewConfig.config.webServer -eq "iis")
     write-log "Disabling Carbon due to namespace clash"
     Remove-Module "carbon"
     import-module servermanager | Out-Null
-    Write-Log -Message "Installing IIS Server - This may take a couple of minutes"
+    Write-Log -Message "Installing IIS Server - This may take 10+ minutes"
     # Configure Windows Features
     Install-WindowsFeature Web-Server, Web-Dyn-Compression, Web-Windows-Auth, Web-ASP, Web-ASP-NET45, Web-Mgmt-Tools | Out-Null
 
     # Remove the Default Web Site and DefaultAppPool
+    Write-Log -Message "Configure IIS Server"
     Remove-Website -Name 'Default Web Site' | Out-Null
     Remove-WebAppPool DefaultAppPool  | Out-Null
 
