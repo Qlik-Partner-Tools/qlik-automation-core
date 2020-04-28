@@ -45,13 +45,20 @@ if ($scenario.config.servers[0].license -eq "signed" )
 }
 else {
   Write-Log -Message "Setting license: Lef"
-  c:\\installation\\post-install\\set-license.exe -serial $license.qlikview.serial -control $license.qlikview.control -name "$($license.qlikview.name)" -organization "$($license.qlikview.organization)"
+  #old
+  # c:\\installation\\post-install\\set-license.exe -serial $license.qlikview.serial -control $license.qlikview.control -name "$($license.qlikview.name)" -organization "$($license.qlikview.organization)"
+  c:\\shared-content\\scripts\\qv-set-license\\qv-set-license.exe $Env:Computername LEF QVS $license.qlikview.serial $license.qlikview.control "$($license.qlikview.name)" "$($license.qlikview.organization)"
+  Restart-Service QlikviewServer
+  start-Sleep -s 20
+  c:\\shared-content\\scripts\\qv-set-license\\qv-set-license.exe $Env:Computername LEF PUBLISHER $license.qlikview.serial $license.qlikview.control "$($license.qlikview.name)" "$($license.qlikview.organization)"
+  Restart-Service QlikviewDistributionService
+  start-Sleep -s 20
 
 }
 
 Write-Log -Message "Restarting QVS so it accepts license"
-Restart-Service QlikviewServer
-Restart-Service QlikviewDistributionService
+#Restart-Service QlikviewServer
+#Restart-Service QlikviewDistributionService
 Restart-Service QlikviewManagementService
 
 
