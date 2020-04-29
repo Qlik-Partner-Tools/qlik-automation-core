@@ -28,6 +28,7 @@ Catch {
     start-Sleep -s 20
     }
 }
+$qsVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
 
 $license = (Get-Content c:\shared-content\licenses\qlik-license.json -raw) | ConvertFrom-Json
 if ( (Test-Path c:\shared-content-plus\licenses\qlik-license.json) ) {
@@ -37,7 +38,8 @@ if ( (Test-Path c:\shared-content-plus\licenses\qlik-license.json) ) {
 # c:\\installation\\post-install\\set-license.exe -serial $license.qlikview.serial -control $license.qlikview.control -name "$($license.qlikview.name)" -organization "$($license.qlikview.organization)"
 
 # we don't have any multinode QV scenarios so assuming it's the first entry..
-if ($scenario.config.servers[0].license -eq "signed" )
+if ($scenario.config.servers[0].license -eq "signed" -and $qsVer.name -like "QlikView*202*")
+# only use signed license from 2020 onward
 {
     Write-Log -Message "Setting license: Signed"
     c:\\shared-content\\scripts\\qv-set-license\\qv-set-license.exe $Env:Computername SIGNED $license.qliksigned.key  
