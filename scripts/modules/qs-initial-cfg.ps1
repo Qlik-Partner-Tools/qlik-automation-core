@@ -49,8 +49,12 @@ Write-Log -Message "Installing Networking module"
 Install-Module -Name xNetworking -Confirm:$false -Force  | Out-Null
 Write-Log -Message "Installing SMB module"
 Install-Module -Name xSmbShare -Confirm:$false -Force  | Out-Null
+
 Write-Log -Message "Installing Qlik-CLI module"
-Install-Module -Name Qlik-CLI -Confirm:$false -Force  | Out-Null
+# Force Qlik-cli version to 1.18.2 as 1.19 broke QMI
+Install-Module -Name Qlik-Cli -RequiredVersion 1.18.2 -Confirm:$false -Force  | Out-Null
+#Install-Module -Name Qlik-CLI -Confirm:$false -Force  | Out-Null
+
 Write-Log -Message "Installing Qlik-DSC module"
 Install-Module -Name QlikResources -Confirm:$false -Force  | Out-Null
 
