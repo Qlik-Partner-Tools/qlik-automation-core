@@ -52,8 +52,9 @@ Install-Module -Name xSmbShare -Confirm:$false -Force  | Out-Null
 
 Write-Log -Message "Installing Qlik-CLI module"
 # Force Qlik-cli version to 1.18.2 as 1.19 broke QMI
-Install-Module -Name Qlik-Cli -RequiredVersion 1.18.2 -Confirm:$false -Force  | Out-Null
-#Install-Module -Name Qlik-CLI -Confirm:$false -Force  | Out-Null
+#Install-Module -Name Qlik-Cli -RequiredVersion 1.18.2 -Confirm:$false -Force  | Out-Null
+# testing 1.19.1 which should fix this
+Install-Module -Name Qlik-CLI -Confirm:$false -Force  | Out-Null
 
 Write-Log -Message "Installing Qlik-DSC module"
 Install-Module -Name QlikResources -Confirm:$false -Force  | Out-Null
