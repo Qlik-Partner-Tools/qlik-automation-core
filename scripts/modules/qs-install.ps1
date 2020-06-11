@@ -35,7 +35,10 @@ $qsVersionBoth = @("Qlik Sense April 2019",
                     "Qlik Sense February 2020 pre-release", 
                     "Qlik Sense February 2020",
                     "Qlik Sense April 2020 pre-release",
-                    "Qlik Sense April 2020" )
+                    "Qlik Sense April 2020",
+                    "Qlik Sense June 2020" )
+
+ $qsVersionEula = @("Qlik Sense June 2020" )
 
 $qsVer = (Get-Content C:\shared-content\binaries\qver.json -raw) | ConvertFrom-Json
 
@@ -71,6 +74,11 @@ foreach ($server in $scenario.config.servers)
                 {
                 Write-log -Message "Installing with Dashboard Bundle and Extension Bundle"
                 Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass) bundleinstall=dashboard,visualization spc=c:\installation\sp_config.xml" -Wait -PassThru} | Out-Null
+                }
+                elseif ($qsVersionEula -contains $qsVer.name)
+                {
+                Write-log -Message "Installing with accepteula=1"
+                Invoke-Command -ScriptBlock {Start-Process -FilePath "c:\shared-content\binaries\Qlik_Sense_setup.exe" -ArgumentList "-s -log c:\installation\logqlik.txt accepteula=1 dbpassword=$($config.sense.PostgresAccountPass) hostname=$($env:COMPUTERNAME) userwithdomain=$($env:computername)\$($config.sense.serviceAccount) password=$($config.sense.serviceAccountPass) bundleinstall=dashboard,visualization spc=c:\installation\sp_config.xml" -Wait -PassThru} | Out-Null
                 }
             else
                 {
