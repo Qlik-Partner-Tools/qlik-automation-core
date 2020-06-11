@@ -35,8 +35,7 @@ $qsVersionBoth = @("Qlik Sense April 2019",
                     "Qlik Sense February 2020 pre-release", 
                     "Qlik Sense February 2020",
                     "Qlik Sense April 2020 pre-release",
-                    "Qlik Sense April 2020",
-                    "Qlik Sense June 2020" )
+                    "Qlik Sense April 2020")
 
  $qsVersionEula = @("Qlik Sense June 2020" )
 
